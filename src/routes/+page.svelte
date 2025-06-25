@@ -1,4 +1,6 @@
 <script lang="ts">
+	import { fly } from 'svelte/transition';
+
 	// Define the navigation items and selected state
 	const navItems = ['Home', 'Profile', 'Settings'];
 	let selectedNav: string = $state('Home');
@@ -37,7 +39,10 @@
 		{selectedNav}
 	</button>
 	{#if isNavOpen}
-		<nav class="w-full rounded-xl bg-white shadow-md dark:bg-zinc-700">
+		<nav
+			class="w-full rounded-xl bg-white shadow-md dark:bg-zinc-700"
+			in:fly={{ y: -5, opacity: 0, duration: 300 }}
+		>
 			<ul class="flex flex-col gap-1">
 				{#each navItems as item}
 					<li>
