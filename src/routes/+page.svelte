@@ -17,16 +17,57 @@
 			textarea.style.height = `${textarea.scrollHeight + 2}px`;
 		}
 	}
+
+	let isNavOpen: boolean = $state(false);
 </script>
 
 <svelte:head>
 	<title>Inteliport</title>
 </svelte:head>
 
+<!-- Mobile Navigation Bar -->
+<div class="absolute top-0 w-full p-3 xl:hidden">
+	<button
+		onclick={() => (isNavOpen = !isNavOpen)}
+		class="
+    		{isNavOpen ? 'hidden' : ''}
+    		w-full rounded-lg bg-zinc-200 px-4 py-2 text-center font-medium dark:bg-zinc-600
+		"
+	>
+		{selectedNav}
+	</button>
+	{#if isNavOpen}
+		<nav class="w-full rounded-xl bg-white shadow-md dark:bg-zinc-700">
+			<ul class="flex flex-col gap-1">
+				{#each navItems as item}
+					<li>
+						<button
+							onclick={() => {
+								selectNav(item);
+								isNavOpen = false;
+							}}
+							class="
+									w-full rounded-lg px-4 py-2 text-center font-medium
+									hover:cursor-pointer hover:bg-zinc-300 active:bg-zinc-300
+									dark:hover:bg-zinc-500 dark:active:bg-zinc-600
+									{selectedNav === item ? 'bg-zinc-200 dark:bg-zinc-600' : ''}
+									transition-colors duration-300
+									hover:transition-none
+								"
+						>
+							{item}
+						</button>
+					</li>
+				{/each}
+			</ul>
+		</nav>
+	{/if}
+</div>
+
 <!-- Main container with darkmode support -->
 <div class="flex h-screen w-full gap-4 p-4 shadow-lg">
 	<!-- Left Navigation Bar -->
-	<nav class="w-64 rounded-xl bg-white p-3 shadow-md dark:bg-zinc-700">
+	<nav class="hidden w-64 rounded-xl bg-white p-3 shadow-md xl:block dark:bg-zinc-700">
 		<ul class="flex flex-col gap-1">
 			{#each navItems as item}
 				<li>
@@ -64,7 +105,7 @@
 		</div>
 
 		<!-- Text Input at the Bottom -->
-		<div class="absolute bottom-7 w-5xl p-4">
+		<div class="absolute bottom-7 w-full p-4 lg:w-5xl">
 			<textarea
 				bind:value={text}
 				bind:this={textarea}
