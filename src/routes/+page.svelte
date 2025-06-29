@@ -1,9 +1,10 @@
 <script lang="ts">
 	import { fly } from 'svelte/transition';
+	import DisplayGraph from './DisplayGraph.svelte';
 
 	// Define the navigation items and selected state
-	const navItems = ['Home', 'Profile', 'Settings'];
-	let selectedNav: string = $state('Home');
+	const navItems = ['Graph', 'Profile', 'Settings'];
+	let selectedNav: string = $state('Graph');
 
 	function selectNav(item: string) {
 		selectedNav = item;
@@ -96,10 +97,11 @@
 
 	<!-- Main Display Area -->
 	<main class="flex flex-1 flex-col items-center justify-between p-4 pb-32">
-		<div id="main-content" class="flex h-full w-full flex-col items-center justify-center">
-			{#if selectedNav === 'Home'}
-				<h1 class="mb-4 text-2xl font-bold">Home</h1>
-				<p>Welcome to the home page.</p>
+		<div id="main-content" class="flex h-full w-full flex-col items-center justify-around">
+			{#if selectedNav === 'Graph'}
+				<!-- <h1 class="mb-4 text-2xl font-bold">Graph</h1> -->
+				<p>Welcome to the Graph page.</p>
+				<DisplayGraph />
 			{:else if selectedNav === 'Profile'}
 				<h1 class="mb-4 text-2xl font-bold">Profile</h1>
 				<p>Here is your profile information.</p>
