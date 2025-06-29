@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
 	import cytoscape from 'cytoscape';
+	import { runKruskal } from '$lib/mst';
 
 	let container: HTMLDivElement;
 	let cy: cytoscape.Core;
@@ -74,6 +75,14 @@
 						'line-color': '#B10DC9',
 						'target-arrow-color': '#B10DC9'
 					}
+				},
+				{
+					selector: 'edge.highlighted',
+					style: {
+						'line-color': '#2ECC40',
+						'target-arrow-color': '#2ECC40',
+						'width': 4
+					}
 				}
 			],
 
@@ -131,9 +140,20 @@
 			cy.center();
 		}
 	}
+	function runMst(){
+		const mst = runKruskal(cy);
+
+		// Optional: highlight the MST
+		cy.edges().removeClass('	');
+		mst.forEach(edge => edge.addClass('highlighted'));
+	}
+	
 </script>
 
 <div class="h-[80%] w-full" bind:this={container}></div>
+<!-- <button class="mt-4 px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700" onclick={runMst}>
+  Run MST
+</button> -->
 <!-- <div class="graph-container p-5 font-sans">
 	<div class="info mt-5 rounded-lg border-l-4 border-blue-600 bg-blue-50 p-3 dark:bg-gray-800">
 		<h3 class="mt-0 text-lg text-gray-800 dark:text-gray-200">Instructions:</h3>
