@@ -97,7 +97,7 @@
 
 	<!-- Main Display Area -->
 	<main class="flex flex-1 flex-col items-center justify-between p-4 pb-32">
-		<div id="main-content" class="flex h-full w-full flex-col items-center justify-around">
+		<div id="main-content" class="flex h-full w-full flex-col items-center justify-around pt-10">
 			{#if selectedNav === 'Graph'}
 				<!-- <h1 class="mb-4 text-2xl font-bold">Graph</h1> -->
 				<p>Welcome to the Graph page.</p>

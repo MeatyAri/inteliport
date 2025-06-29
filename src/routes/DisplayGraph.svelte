@@ -2,6 +2,7 @@
 	import { onMount } from 'svelte';
 	import cytoscape from 'cytoscape';
 	import { runKruskal } from '$lib/mst';
+	import { clearHighlights, highlightEdges } from '$lib/highlights';
 
 	let container: HTMLDivElement;
 	let cy: cytoscape.Core;
@@ -13,12 +14,12 @@
 
 			elements: [
 				// Nodes
-				{ data: { id: 'a', label: 'Node A' } },
-				{ data: { id: 'b', label: 'Node B' } },
-				{ data: { id: 'c', label: 'Node C' } },
-				{ data: { id: 'd', label: 'Node D' } },
-				{ data: { id: 'e', label: 'Node E' } },
-				{ data: { id: 'f', label: 'Node F' } },
+				{ data: { id: 'a', label: 'A' } },
+				{ data: { id: 'b', label: 'B' } },
+				{ data: { id: 'c', label: 'C' } },
+				{ data: { id: 'd', label: 'D' } },
+				{ data: { id: 'e', label: 'E' } },
+				{ data: { id: 'f', label: 'F' } },
 
 				// Edges
 				{ data: { id: 'ab', source: 'a', target: 'b', label: 'Edge A-B', weight: 1 } },
@@ -41,10 +42,8 @@
 						'text-halign': 'center',
 						'font-size': '12px',
 						'font-weight': 'bold',
-						width: '60px',
-						height: '60px',
-						'border-width': '2px',
-						'border-color': '#001f3f'
+						width: '35px',
+						height: '35px'
 					}
 				},
 				{
@@ -53,7 +52,7 @@
 						width: 3,
 						'line-color': '#FF4136',
 						'target-arrow-color': '#FF4136',
-						'target-arrow-shape': 'triangle',
+						'target-arrow-shape': 'none',
 						'curve-style': 'bezier',
 						label: 'data(weight)',
 						'font-size': '10px',
@@ -81,7 +80,7 @@
 					style: {
 						'line-color': '#2ECC40',
 						'target-arrow-color': '#2ECC40',
-						'width': 4
+						width: 4
 					}
 				}
 			],
@@ -140,19 +139,19 @@
 			cy.center();
 		}
 	}
-	function runMst(){
+	// Function to run MST
+	function runMst() {
 		const mst = runKruskal(cy);
 
-		// Optional: highlight the MST
-		cy.edges().removeClass('	');
-		mst.forEach(edge => edge.addClass('highlighted'));
+		// highlight the MST Path
+		clearHighlights(cy);
+		highlightEdges(mst);
 	}
-	
 </script>
 
 <div class="h-[80%] w-full" bind:this={container}></div>
-<!-- <button class="mt-4 px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700" onclick={runMst}>
-  Run MST
+<!-- <button class="mt-4 rounded bg-blue-600 px-4 py-2 text-white hover:bg-blue-700" onclick={runMst}>
+	Run MST
 </button> -->
 <!-- <div class="graph-container p-5 font-sans">
 	<div class="info mt-5 rounded-lg border-l-4 border-blue-600 bg-blue-50 p-3 dark:bg-gray-800">
