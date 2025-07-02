@@ -147,12 +147,93 @@
 		clearHighlights(cy);
 		highlightEdges(mst);
 	}
+
+	//Function to check whether all pairs of nodes are reachable within two hops
+	function checkAllPairsThreeHopReachability(cyto: cytoscape.Core): boolean {
+		const nodes = cyto.nodes();
+		if (nodes.length === 0) {
+			return true; // Empty graph is trivially reachable
+		}
+
+		for (let i = 0; i < nodes.length; i++) {
+			for (let j = i + 1; j < nodes.length; j++) {
+				// Avoid redundant checks and self-checks
+				const startNode = nodes.eq(i);
+				const endNode = nodes.eq(j);
+
+				if (!isReachableWithinTwoHops(cyto, startNode.id(), endNode.id())) {
+					return false; // If any pair is not reachable, the whole graph is not
+				}
+			}
+		}
+
+		return true; // All pairs are reachable within 2 hops
+	}
+
+	/**
+	 * Checks if a specific end node is reachable from a start node within a maximum of 2 hops.
+	 *
+	 * @param cyto The Cytoscape instance.
+	 * @param startNodeId The ID of the starting node.
+	 * @param endNodeId The ID of the ending node.
+	 * @returns True if the end node is reachable within 2 hops, false otherwise.
+	 */
+	function isReachableWithinTwoHops(
+		cyto: cytoscape.Core,
+		startNodeId: string,
+		endNodeId: string
+	): boolean {
+		const visited = new Set<string>();
+		const queue: string[] = [startNodeId];
+		visited.add(startNodeId);
+
+		let hopCount = 0;
+
+		while (queue.length > 0 && hopCount <= 3) {
+			const currentLevelSize = queue.length;
+
+			for (let i = 0; i < currentLevelSize; i++) {
+				const currentNodeId = queue.shift()!;
+
+				if (currentNodeId === endNodeId) {
+					return true; // Reached the end node
+				}
+
+				const neighbors = cyto.nodes(`#${currentNodeId}`).neighborhood().nodes();
+				for (const neighbor of neighbors) {
+					if (!visited.has(neighbor.id())) {
+						visited.add(neighbor.id());
+						queue.push(neighbor.id());
+					}
+				}
+			}
+
+			hopCount++;
+		}
+
+		return false; // Did not reach the end node within 2 hops
+	}
 </script>
 
 <div class="h-[80%] w-full" bind:this={container}></div>
-<!-- <button class="mt-4 rounded bg-blue-600 px-4 py-2 text-white hover:bg-blue-700" onclick={runMst}>
+<button class="mt-4 rounded bg-blue-600 px-4 py-2 text-white hover:bg-blue-700" onclick={runMst}>
 	Run MST
-</button> -->
+</button>
+
+<button
+	class="mt-4 rounded bg-green-600 px-4 py-2 text-white hover:bg-green-700"
+	onclick={() => {
+		const result = checkAllPairsThreeHopReachability(cy);
+		alert(
+			result
+				? 'All nodes are reachable within two hops.'
+				: 'Not all nodes are reachable within two hops.'
+		);
+	}}
+>
+	Check all pairs 2-Hop Reachability
+</button>
+
 <!-- <div class="graph-container p-5 font-sans">
 	<div class="info mt-5 rounded-lg border-l-4 border-blue-600 bg-blue-50 p-3 dark:bg-gray-800">
 		<h3 class="mt-0 text-lg text-gray-800 dark:text-gray-200">Instructions:</h3>
