@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { fly } from 'svelte/transition';
 	import DisplayGraph from './DisplayGraph.svelte';
+	import { handleToolCalls } from './Tools';
 
 	// Define the navigation items and selected state
 	const navItems = ['Graph', 'Profile', 'Settings'];
@@ -14,6 +15,8 @@
 	let text: string = $state('');
 	let textarea: HTMLTextAreaElement;
 
+	let myForm: HTMLFormElement;
+
 	function adjustHeight() {
 		if (textarea) {
 			textarea.style.height = 'auto';
@@ -22,6 +25,49 @@
 	}
 
 	let isNavOpen: boolean = $state(false);
+
+	function handleEnter(event: KeyboardEvent) {
+		if (event.key === 'Enter' && !event.shiftKey) {
+			event.preventDefault();
+			if (text.trim() === '') {
+				return;
+			}
+			if (event.ctrlKey) {
+				triggerCtrlEnterFunction();
+			} else {
+				triggerEnterFunction();
+			}
+		}
+	}
+
+	async function triggerEnterFunction() {
+		console.log('Enter function triggered');
+
+		// TODO: call the Agent API
+		const response = await fetch('/api/agent', {
+			method: 'POST',
+			headers: {
+				'Content-Type': 'application/json'
+			},
+			body: JSON.stringify({ query: text })
+		});
+
+		const data = await response.json();
+
+		// Extract tool calls from the response and execute functions
+		if (data.tool_calls) {
+			handleToolCalls(data);
+		}
+	}
+
+	function triggerCtrlEnterFunction() {
+		console.log('Ctrl+Enter function triggered');
+		// Add your logic here for Ctrl+Enter key press
+		if (textarea) {
+			textarea.value = '';
+			textarea.focus();
+		}
+	}
 </script>
 
 <svelte:head>
@@ -99,15 +145,18 @@
 	<main class="flex flex-1 flex-col items-center justify-between p-4 pb-32">
 		<div id="main-content" class="flex h-full w-full flex-col items-center justify-around pt-10">
 			{#if selectedNav === 'Graph'}
-				<!-- <h1 class="mb-4 text-2xl font-bold">Graph</h1> -->
 				<p>Welcome to the Graph page.</p>
 				<DisplayGraph />
 			{:else if selectedNav === 'Profile'}
-				<h1 class="mb-4 text-2xl font-bold">Profile</h1>
-				<p>Here is your profile information.</p>
+				<div class="text-center">
+					<h1 class="mb-4 text-2xl font-bold">Profile</h1>
+					<p>Here is your profile information.</p>
+				</div>
 			{:else if selectedNav === 'Settings'}
-				<h1 class="mb-4 text-2xl font-bold">Settings</h1>
-				<p>Configure your preferences here.</p>
+				<div class="text-center">
+					<h1 class="mb-4 text-2xl font-bold">Settings</h1>
+					<p>Configure your preferences here.</p>
+				</div>
 			{/if}
 		</div>
 
@@ -117,6 +166,7 @@
 				bind:value={text}
 				bind:this={textarea}
 				oninput={adjustHeight}
+				onkeydown={handleEnter}
 				placeholder="Type something..."
 				class="
 					w-full resize-none rounded-3xl border border-zinc-300 bg-white p-4
