@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
 	import cytoscape from 'cytoscape';
-	import { shared } from './shared.svelte';
+	import { shared } from '$lib/shared.svelte';
 
 	let container: HTMLDivElement;
 

@@ -1,13 +1,14 @@
 import { checkAllPairstwoHopReachability } from '$lib/graph/hop';
 import { clearHighlights, highlightEdges } from '$lib/graph/highlights';
 import { runKruskal } from '$lib/graph/mst';
-import { shared } from './shared.svelte';
+import { shared } from '$lib/shared.svelte';
+import { runDijkstra } from '$lib/graph/dijkstra';
 
 export async function handleToolCalls(data: any) {
 	for (const toolCall of data.tool_calls) {
 		if (toolCall.type === 'function') {
 			const functionName = toolCall.function.name;
-			const functionArgs = toolCall.function.arguments;
+			const functionArgs = JSON.parse(toolCall.function.arguments);
 
 			if (functionName === 'get_mst') {
 				// Execute the get_mst function
@@ -44,6 +45,23 @@ export async function handleToolCalls(data: any) {
 						? 'All nodes are reachable within two hops.'
 						: 'Not all nodes are reachable within two hops.'
 				);
+			} else if (functionName === 'run_dijkstra') {
+				if (!shared.graph) {
+					alert('No graph loaded');
+					return;
+				}
+				const { source, target } = functionArgs;
+				const dijkstraResult = runDijkstra(shared.graph, source, target);
+
+				if (typeof dijkstraResult === 'string') {
+					alert(dijkstraResult);
+					return;
+				}
+				const { edges } = dijkstraResult;
+
+				// highlight the path
+				clearHighlights(shared.graph);
+				highlightEdges(edges);
 			}
 		}
 	}

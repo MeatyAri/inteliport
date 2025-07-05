@@ -30,5 +30,26 @@ export const tools = [
 			strict: true,
 			description: 'Check if all nodes are reachable within two hops.'
 		}
+	},
+	{
+		type: 'function',
+		function: {
+			name: 'run_dijkstra',
+			strict: true,
+			description: "Run Dijkstra's algorithm on the graph.",
+			parameters: {
+				type: 'object',
+				properties: {
+					source: {
+						type: 'string',
+						description: 'The source node to start the algorithm from.'
+					},
+					target: {
+						type: 'string',
+						description: 'The target node to find the shortest path to.'
+					}
+				}
+			}
+		}
 	}
 ];

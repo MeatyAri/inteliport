@@ -6,11 +6,11 @@
   - [ ] add node function (choose the best fusion point)
   - [ ] delete node function
   - [x] add MST (Minimum Spanning Tree)
-  - [ ] make sure every node is accessible by going through at most 2 other nodes
+  - [x] make sure every node is accessible by going through at most 2 other nodes
 
 ## Phase 2:
 
-- [ ] add Dijkstra to find best possible route
+- [x] add Dijkstra to find best possible route
 - [x] highlight the selected path
 - [ ] a display menu for trip selection
   - [ ] display trip start time
