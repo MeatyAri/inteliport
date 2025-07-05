@@ -1,3 +1,5 @@
+import type cytoscape from "cytoscape";
+
 export function addNode(cy: cytoscape.Core, label: string) {
 	cy.add({
 		data: { id: label.toLowerCase(), label: label },
@@ -34,4 +36,30 @@ export function deleteNode(cy: cytoscape.Core, nodeId: string): void {
 	} else {
 		console.log(`Node with ID ${nodeId} not found.`);
 	}
+}
+export function deleteEdge(cy: cytoscape.Core, nodeId1: string, nodeId2: string): void {
+	const edge = findEdgeByIds(cy, nodeId1, nodeId2);
+	if (edge) {
+		edge.remove();
+	} else {
+		console.log("Edge not found.");
+	}
+}
+
+export function findEdgeByIds(cy: cytoscape.Core, nodeId1: string, nodeId2: string): cytoscape.EdgeSingular | null {
+	// Get all edges in the Cytoscape instance
+	const edges = cy.edges();
+
+	// Iterate through the edges to find the one that matches the given IDs
+	for (const edge of edges) {
+		const sourceId = edge.source().id();
+		const targetId = edge.target().id();
+
+		// Check if the edge's source and target match the provided edge IDs
+		if ((sourceId === nodeId1 && targetId === nodeId2) || (sourceId === nodeId2 && targetId === nodeId1)) {
+			return edge; // Return the found edge
+		}
+	}
+
+	return null; // Return null if no matching edge is found
 }

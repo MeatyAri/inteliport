@@ -110,5 +110,26 @@ export const tools = [
 				}
 			}
 		}
+	},
+	{
+		type: 'function',
+		function: {
+			name: 'delete_edge',
+			strict: true,
+			description: 'Delete/remove an edge from the graph.',
+			parameters: {
+				type: 'object',
+				properties: {
+					nodeId1: {
+						type: 'string',
+						description: 'The first node of the edge.'
+					},
+					nodeId2: {
+						type: 'string',
+						description: 'The second node of the edge.'
+					}
+				}
+			}
+		}
 	}
 ];
