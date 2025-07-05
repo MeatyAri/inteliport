@@ -11,7 +11,7 @@ export async function handleToolCalls(data: any) {
 			const functionName = toolCall.function.name;
 			const functionArgs = JSON.parse(toolCall.function.arguments);
 
-
+			
 			if (functionName === 'get_mst') {
 				// Execute the get_mst function
 				if (!shared.graph) {
@@ -43,7 +43,7 @@ export async function handleToolCalls(data: any) {
 				}
 				const result = checkAllPairstwoHopReachability(shared.graph);
 				alert(
-					result
+					result[0]
 						? 'All nodes are reachable within two hops.'
 						: 'Not all nodes are reachable within two hops.'
 				);
