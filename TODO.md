@@ -19,6 +19,8 @@
 
 # Later:
 
+- add confirmation to graph changes like modify edges and nodes
+
 ## Phase 4:
 
 - [ ] Divide and Conquer for bigger graphs and computational efficiency
