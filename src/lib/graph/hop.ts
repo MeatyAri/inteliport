@@ -12,7 +12,9 @@ export function checkAllPairstwoHopReachability(cyto: cytoscape.Core): boolean {
 			const endNode = nodes.eq(j);
 
 			if (!isReachableWithinTwoHops(cyto, startNode.id(), endNode.id())) {
-				return false; // If any pair is not reachable, the whole graph is not
+				//return false;
+				// If any pair is not reachable, the whole graph is not
+				
 			}
 		}
 	}

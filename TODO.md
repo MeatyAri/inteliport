@@ -4,9 +4,10 @@
 
 - [x] implement a weighted graph
   - [ ] add node function (choose the best fusion point)
-  - [ ] delete node function
+  - [x] delete node function
   - [x] add MST (Minimum Spanning Tree)
   - [x] make sure every node is accessible by going through at most 2 other nodes
+  - [ ] arian is a good boi
 
 ## Phase 2:
 

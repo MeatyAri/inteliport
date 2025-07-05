@@ -51,5 +51,22 @@ export const tools = [
 				}
 			}
 		}
+	},
+	{
+		type: 'function',
+		function: {
+			name: 'delete_node',
+			strict: true,
+			description: "delete a node.",
+			parameters: {
+				type: 'object',
+				properties: {
+					nodeId: {
+						type: 'string',
+						description: 'The id of the node to delete.'
+					}
+				}
+			}
+		}
 	}
 ];

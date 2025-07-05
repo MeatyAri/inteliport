@@ -129,6 +129,7 @@
 			});
 		}
 	}
+	
 </script>
 
 <div class="h-[80%] w-full" bind:this={container}></div>

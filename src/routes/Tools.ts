@@ -3,12 +3,14 @@ import { clearHighlights, highlightEdges } from '$lib/graph/highlights';
 import { runKruskal } from '$lib/graph/mst';
 import { shared } from '$lib/shared.svelte';
 import { runDijkstra } from '$lib/graph/dijkstra';
+import { deleteNode } from '$lib/graph/delete';
 
 export async function handleToolCalls(data: any) {
 	for (const toolCall of data.tool_calls) {
 		if (toolCall.type === 'function') {
 			const functionName = toolCall.function.name;
 			const functionArgs = JSON.parse(toolCall.function.arguments);
+
 
 			if (functionName === 'get_mst') {
 				// Execute the get_mst function
@@ -62,6 +64,15 @@ export async function handleToolCalls(data: any) {
 				// highlight the path
 				clearHighlights(shared.graph);
 				highlightEdges(edges);
+			} else if (functionName === 'delete_node') {
+				// Delete a node from the graph
+				if (!shared.graph) {
+					alert('No graph loaded');
+					return;
+				}
+				const { nodeId } = functionArgs;
+				deleteNode(shared.graph, nodeId);
+
 			}
 		}
 	}
