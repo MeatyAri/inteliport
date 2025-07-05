@@ -57,13 +57,55 @@ export const tools = [
 		function: {
 			name: 'delete_node',
 			strict: true,
-			description: "delete a node.",
+			description: 'Delete a node.',
 			parameters: {
 				type: 'object',
 				properties: {
 					nodeId: {
 						type: 'string',
 						description: 'The id of the node to delete.'
+					}
+				}
+			}
+		}
+	},
+	{
+		type: 'function',
+		function: {
+			name: 'add_node',
+			strict: true,
+			description: 'Add a new node to the graph.',
+			parameters: {
+				type: 'object',
+				properties: {
+					label: {
+						type: 'string',
+						description: 'The label of the new node.'
+					}
+				}
+			}
+		}
+	},
+	{
+		type: 'function',
+		function: {
+			name: 'add_edge',
+			strict: true,
+			description: 'Add a new edge to the graph.',
+			parameters: {
+				type: 'object',
+				properties: {
+					source: {
+						type: 'string',
+						description: 'The source node of the new edge.'
+					},
+					target: {
+						type: 'string',
+						description: 'The target node of the new edge.'
+					},
+					weight: {
+						type: 'number',
+						description: 'The weight of the new edge.'
 					}
 				}
 			}

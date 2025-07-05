@@ -3,7 +3,7 @@ import { clearHighlights, highlightEdges } from '$lib/graph/highlights';
 import { runKruskal } from '$lib/graph/mst';
 import { shared } from '$lib/shared.svelte';
 import { runDijkstra } from '$lib/graph/dijkstra';
-import { deleteNode } from '$lib/graph/delete';
+import { addEdge, addNode, deleteNode } from '$lib/graph/alterGraph';
 
 export async function handleToolCalls(data: any) {
 	for (const toolCall of data.tool_calls) {
@@ -11,7 +11,6 @@ export async function handleToolCalls(data: any) {
 			const functionName = toolCall.function.name;
 			const functionArgs = JSON.parse(toolCall.function.arguments);
 
-			
 			if (functionName === 'get_mst') {
 				// Execute the get_mst function
 				if (!shared.graph) {
@@ -65,14 +64,26 @@ export async function handleToolCalls(data: any) {
 				clearHighlights(shared.graph);
 				highlightEdges(edges);
 			} else if (functionName === 'delete_node') {
-				// Delete a node from the graph
 				if (!shared.graph) {
 					alert('No graph loaded');
 					return;
 				}
 				const { nodeId } = functionArgs;
 				deleteNode(shared.graph, nodeId);
-
+			} else if (functionName === 'add_node') {
+				if (!shared.graph) {
+					alert('No graph loaded');
+					return;
+				}
+				const { label } = functionArgs;
+				addNode(shared.graph, label);
+			} else if (functionName === 'add_edge') {
+				if (!shared.graph) {
+					alert('No graph loaded');
+					return;
+				}
+				const { source, target, weight } = functionArgs;
+				addEdge(shared.graph, source, target, weight);
 			}
 		}
 	}

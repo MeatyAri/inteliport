@@ -118,18 +118,6 @@
 			}
 		};
 	});
-
-	// Function to add a new node
-	function addNode() {
-		if (shared.graph) {
-			const nodeId = `node_${Date.now()}`;
-			shared.graph.add({
-				data: { id: nodeId, label: `New Node ${nodeId.slice(-4)}` },
-				position: { x: Math.random() * 400, y: Math.random() * 400 }
-			});
-		}
-	}
-	
 </script>
 
 <div class="h-[80%] w-full" bind:this={container}></div>
