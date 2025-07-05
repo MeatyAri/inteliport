@@ -48,7 +48,7 @@
 					selector: 'edge',
 					style: {
 						width: 3,
-						'line-color': '#FF4136',
+						'line-color': '#6a6a6a',
 						'target-arrow-color': '#FF4136',
 						'target-arrow-shape': 'none',
 						'curve-style': 'bezier',
@@ -80,7 +80,25 @@
 						'target-arrow-color': '#2ECC40',
 						width: 4
 					}
+				},
+				{
+					selector: 'edge.highlighted-Traffic1',
+					style: {
+						'line-color': '#FFEF00',
+						'target-arrow-color': '#FFEF00',
+						width: 4
+					}
 				}
+				,
+				{
+					selector: 'edge.highlighted-Traffic2',
+					style: {
+						'line-color': '#FF0000',
+						'target-arrow-color': '#FF0000',
+						width: 4
+					}
+				}
+				
 			],
 
 			layout: {
