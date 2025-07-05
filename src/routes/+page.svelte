@@ -28,7 +28,7 @@
 
 	let isNavOpen: boolean = $state(false);
 
-	function handleEnter(event: KeyboardEvent) {
+	function handleShortcuts(event: KeyboardEvent) {
 		if (event.key === 'Enter' && !event.shiftKey) {
 			event.preventDefault();
 			if (text.trim() === '') {
@@ -39,8 +39,12 @@
 			} else {
 				triggerEnterFunction();
 			}
+		} else if (event.key === 'Escape') {
+			agentResponse = '';
 		}
 	}
+
+	let agentResponse: string = $state('');
 
 	async function triggerEnterFunction() {
 		console.log('Enter function triggered');
@@ -66,6 +70,9 @@
 		if (data.tool_calls) {
 			handleToolCalls(data);
 		}
+
+		// Store the agent response
+		agentResponse = data.content || '';
 	}
 
 	function triggerCtrlEnterFunction() {
@@ -169,17 +176,25 @@
 		</div>
 
 		<!-- Text Input at the Bottom -->
-		<div class="absolute bottom-7 w-full p-4 lg:w-5xl">
+		<div class="absolute bottom-7 w-full lg:w-5xl">
+			<!-- Agent Response Display -->
+			<div
+				class="
+			    relative top-10 z-10 rounded-t-3xl bg-emerald-500/95 p-4 pb-14
+				{agentResponse ? '' : 'hidden'}
+			"
+			>
+				<p class="text-md text-black">{agentResponse}</p>
+			</div>
 			<textarea
 				bind:value={text}
 				bind:this={textarea}
 				oninput={adjustHeight}
-				onkeydown={handleEnter}
+				onkeydown={handleShortcuts}
 				placeholder="Type something..."
 				class="
-					w-full resize-none rounded-3xl border border-zinc-300 bg-white p-4
-					text-zinc-900 shadow-2xl focus:border-blue-500
-					focus:ring-1 focus:ring-blue-500 focus:outline-none
+					relative z-20 w-full resize-none rounded-3xl border border-zinc-300 bg-white
+					p-4 text-zinc-900 shadow-2xl focus:border-emerald-500 focus:outline-none
 					dark:border-zinc-600 dark:bg-zinc-700 dark:text-zinc-100
 				"
 			></textarea>
