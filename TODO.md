@@ -1,14 +1,5 @@
 # TODO:
 
-## Phase 1:
-
-- [x] implement a weighted graph
-  - [ ] add node function (choose the best fusion point)
-  - [x] delete node function
-  - [x] add MST (Minimum Spanning Tree)
-  - [x] make sure every node is accessible by going through at most 2 other nodes
-  - [ ] arian is a good boi
-
 ## Phase 2:
 
 - [x] add Dijkstra to find best possible route
@@ -39,3 +30,12 @@
 # Testing:
 
 # Completed:
+
+## Phase 1:
+
+- [x] implement a weighted graph
+  - [x] add node function (choose the best fusion point)
+  - [x] delete node function
+  - [x] add MST (Minimum Spanning Tree)
+  - [x] make sure every node is accessible by going through at most 2 other nodes
+  - [x] arian is a good boi
