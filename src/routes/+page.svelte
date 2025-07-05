@@ -2,6 +2,8 @@
 	import { fly } from 'svelte/transition';
 	import DisplayGraph from './DisplayGraph.svelte';
 	import { handleToolCalls } from './Tools';
+	import { shared } from '$lib/shared.svelte';
+	import { serializeGraph } from '$lib/graph/serialize';
 
 	// Define the navigation items and selected state
 	const navItems = ['Graph', 'Profile', 'Settings'];
@@ -43,13 +45,19 @@
 	async function triggerEnterFunction() {
 		console.log('Enter function triggered');
 
-		// TODO: call the Agent API
+		// Serialize the current graph for context
+		let graphData = null;
+		if (shared.graph) {
+			graphData = serializeGraph(shared.graph);
+		}
+
+		// Call the Agent API with graph context
 		const response = await fetch('/api/agent', {
 			method: 'POST',
 			headers: {
 				'Content-Type': 'application/json'
 			},
-			body: JSON.stringify({ query: text })
+			body: JSON.stringify({ query: text, graphData })
 		});
 
 		const data = await response.json();
