@@ -4,13 +4,17 @@
 
 - [x] add Dijkstra to find best possible route
 - [x] highlight the selected path
-- [ ] a display menu for trip selection
-  - [ ] display trip start time
-  - [ ] display trip end time
-  - [ ] display trip duration
-  - [ ] llm function to start the trip
-- [ ] heatmap mechanism for weighted graph (probably a JSON with edges and a number assigned to each edge)
-- [ ] a priority queue for when a path hits its limit
+- [x] a display menu for trip selection
+  - [x] display trip start time
+  - [x] display trip end time
+  - [x] display trip duration
+  - [x] llm function to start the trip
+- [x] heatmap mechanism for weighted graph (probably a JSON with edges and a number assigned to each edge)
+- [x] a priority queue for when a path hits its limit
+
+- [ ] close the trip menu
+- [ ] green highlight on top
+- [ ] multiple peding trips
 
 ## Phase 3:
 

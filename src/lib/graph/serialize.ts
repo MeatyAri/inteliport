@@ -1,4 +1,6 @@
 import type cytoscape from 'cytoscape';
+import { tripManager } from '$lib/trip/tripManager';
+import { shared } from '$lib/shared.svelte';
 
 /**
  * Converts a Cytoscape graph to a human-readable text representation
@@ -90,6 +92,60 @@ export function serializeGraph(graph: cytoscape.Core): string {
 		}
 	}
 
+	// Add trip status information
+	const currentTime = tripManager.getCurrentTime();
+	const ongoingTrips = tripManager.getOngoingTrips();
+	const queuedTrips = tripManager.getQueuedTrips();
+	const pendingTrip = shared.pendingTrip;
+
+	output += '\nTrip Status:\n';
+	output += `Current Time: ${formatTime(currentTime)}\n\n`;
+
+	if (ongoingTrips.length > 0) {
+		output += 'Ongoing Trips:\n';
+		ongoingTrips.forEach((trip) => {
+			const pathNodes = trip.path.filter((p) => p.length === 1);
+			output += `- Trip ID: ${trip.id}\n`;
+			output += `  Source: ${pathNodes[0]?.toUpperCase() || 'Unknown'}\n`;
+			output += `  Target: ${pathNodes[pathNodes.length - 1]?.toUpperCase() || 'Unknown'}\n`;
+			output += `  Start Time: ${formatTime(trip.startTime)}\n`;
+			output += `  Duration: ${trip.duration} seconds\n`;
+			output += `  Remaining Time: ${Math.max(0, trip.startTime + trip.duration - currentTime)} seconds\n`;
+			output += `  Status: ${trip.status}\n\n`;
+		});
+	} else {
+		output += 'No ongoing trips.\n\n';
+	}
+
+	if (queuedTrips.length > 0) {
+		output += 'Queued Trips:\n';
+		queuedTrips.forEach((trip) => {
+			const pathNodes = trip.path.filter((p) => p.length === 1);
+			output += `- Trip ID: ${trip.id}\n`;
+			output += `  Source: ${pathNodes[0]?.toUpperCase() || 'Unknown'}\n`;
+			output += `  Target: ${pathNodes[pathNodes.length - 1]?.toUpperCase() || 'Unknown'}\n`;
+			output += `  Estimated Start Time: ${formatTime(trip.estimatedStartTime || trip.startTime)}\n`;
+			output += `  Duration: ${trip.duration} seconds\n`;
+			output += `  Wait Time: ${tripManager.getTimeUntilStart(trip)} seconds\n`;
+			output += `  Status: ${trip.status}\n\n`;
+		});
+	} else {
+		output += 'No queued trips.\n\n';
+	}
+
+	if (pendingTrip) {
+		output += 'Pending Trip:\n';
+		const pathNodes = pendingTrip.path.filter((p: string) => p.length === 1);
+		output += `- Trip ID: ${pendingTrip.id}\n`;
+		output += `  Source: ${pathNodes[0]?.toUpperCase() || 'Unknown'}\n`;
+		output += `  Target: ${pathNodes[pathNodes.length - 1]?.toUpperCase() || 'Unknown'}\n`;
+		output += `  Estimated Start Time: ${formatTime(pendingTrip.estimatedStartTime || pendingTrip.startTime)}\n`;
+		output += `  Duration: ${pendingTrip.duration} seconds\n`;
+		output += `  Status: ${pendingTrip.status}\n\n`;
+	} else {
+		output += 'No pending trip.\n\n';
+	}
+
 	return output;
 }
 
@@ -122,5 +178,23 @@ export function serializeGraphCompact(graph: cytoscape.Core): string {
 		.join(', ');
 	output += `Edges: ${edgeList}`;
 
+	// Add trip status information
+	const currentTime = tripManager.getCurrentTime();
+	const ongoingTrips = tripManager.getOngoingTrips();
+	const queuedTrips = tripManager.getQueuedTrips();
+	const pendingTrip = shared.pendingTrip;
+
+	output += `\nCurrent Time: ${formatTime(currentTime)}\n`;
+	output += `Ongoing Trips: ${ongoingTrips.length}\n`;
+	output += `Queued Trips: ${queuedTrips.length}\n`;
+	output += `Pending Trip: ${pendingTrip ? pendingTrip.id : 'None'}\n`;
+
 	return output;
+}
+
+function formatTime(timestamp: number): string {
+	const hours = Math.floor(timestamp / 3600);
+	const minutes = Math.floor((timestamp % 3600) / 60);
+	const seconds = timestamp % 60;
+	return `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
 }

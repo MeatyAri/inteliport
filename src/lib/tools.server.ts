@@ -55,6 +55,52 @@ export const tools = [
 	{
 		type: 'function',
 		function: {
+			name: 'plan_trip',
+			strict: true,
+			description:
+				'Plan a trip from source to target and get trip details including start time, duration, and path.',
+			parameters: {
+				type: 'object',
+				properties: {
+					source: {
+						type: 'string',
+						description: 'The source node to start the trip from.'
+					},
+					target: {
+						type: 'string',
+						description: 'The target node to end the trip at.'
+					},
+					duration: {
+						type: 'number',
+						description:
+							'The duration of the trip in seconds (optional, defaults to distance * 10).'
+					}
+				},
+				required: ['source', 'target']
+			}
+		}
+	},
+	{
+		type: 'function',
+		function: {
+			name: 'start_trip',
+			strict: true,
+			description: 'Start a previously planned trip by trip ID.',
+			parameters: {
+				type: 'object',
+				properties: {
+					tripId: {
+						type: 'string',
+						description: 'The ID of the trip to start.'
+					}
+				},
+				required: ['tripId']
+			}
+		}
+	},
+	{
+		type: 'function',
+		function: {
 			name: 'delete_node',
 			strict: true,
 			description: 'Delete a node.',

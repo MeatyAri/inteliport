@@ -6,8 +6,7 @@ import { runDijkstra } from '$lib/graph/dijkstra';
 import { addEdge, addNode, deleteEdge, deleteNode, findNodeById } from '$lib/graph/alterGraph';
 import { colorNode, resetNodeColor } from '$lib/graph/color';
 import { findTSPPath } from '$lib/graph/tsp';
-// import { colorNodePurple } from '$lib/graph/color';
-
+import { planTrip, startTrip, getTripStatus, getCurrentTime } from '$lib/trip/tripPlanning';
 
 export async function handleToolCalls(data: any) {
 	for (const toolCall of data.tool_calls) {
@@ -67,6 +66,26 @@ export async function handleToolCalls(data: any) {
 				// highlight the path
 				clearHighlights(shared.graph);
 				highlightEdges(edges);
+			} else if (functionName === 'plan_trip') {
+				if (!shared.graph) {
+					alert('No graph loaded');
+					return;
+				}
+				const { source, target, duration } = functionArgs;
+				const result = planTrip(shared.graph, source, target, duration);
+
+				if (result.success && result.trip) {
+					// Store the pending trip for confirmation
+					shared.pendingTrip = result.trip;
+
+					// Highlight the planned path
+					clearHighlights(shared.graph);
+					highlightEdges(result.trip.edges);
+				}
+			} else if (functionName === 'start_trip') {
+				const { tripId } = functionArgs;
+				const result = startTrip(tripId);
+				alert(result.message);
 			} else if (functionName === 'delete_node') {
 				if (!shared.graph) {
 					alert('No graph loaded');
@@ -123,7 +142,6 @@ export async function handleToolCalls(data: any) {
 					return;
 				}
 				const result = findTSPPath(shared.graph, nodeIds, startNodeId);
-
 				//console.log('TSP Result:', result);
 			}
 		}

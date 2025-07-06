@@ -1,9 +1,11 @@
 <script lang="ts">
-	import { onMount } from 'svelte';
+	import { onMount, onDestroy } from 'svelte';
 	import cytoscape from 'cytoscape';
 	import { shared } from '$lib/shared.svelte';
+	$inspect(shared);
 
 	let container: HTMLDivElement;
+	let clockInterval: NodeJS.Timeout;
 
 	onMount(() => {
 		// Initialize Cytoscape
@@ -31,26 +33,13 @@
 				{ data: { id: 'p', label: 'P' } },
 
 				// Edges
-				{ data: { id: 'ab', source: 'a', target: 'b', label: 'Edge A-B', weight: 1 } },
-				{ data: { id: 'cf', source: 'c', target: 'f', label: 'Edge C-F', weight: 2 } },
-				{ data: { id: 'gh', source: 'g', target: 'h', label: 'Edge G-H', weight: 3 } },
-				{ data: { id: 'de', source: 'd', target: 'e', label: 'Edge D-E', weight: 4 } },
-				{ data: { id: 'ik', source: 'i', target: 'k', label: 'Edge I-K', weight: 5 } },
-				{ data: { id: 'jl', source: 'j', target: 'l', label: 'Edge J-L', weight: 6 } },
-				{ data: { id: 'mn', source: 'm', target: 'n', label: 'Edge M-N', weight: 7 } },
-				{ data: { id: 'op', source: 'o', target: 'p', label: 'Edge O-P', weight: 8 } },
-				{ data: { id: 'ah', source: 'a', target: 'h', label: 'Edge A-H', weight: 9 } },
-				{ data: { id: 'bg', source: 'b', target: 'g', label: 'Edge B-G', weight: 10 } },
-				{ data: { id: 'ef', source: 'e', target: 'f', label: 'Edge E-F', weight: 11 } },
-				{ data: { id: 'kj', source: 'k', target: 'j', label: 'Edge K-J', weight: 12 } },
-				{ data: { id: 'no', source: 'n', target: 'o', label: 'Edge N-O', weight: 13 } },
-				{ data: { id: 'cd', source: 'c', target: 'd', label: 'Edge C-D', weight: 14 } },
-				{ data: { id: 'lp', source: 'l', target: 'p', label: 'Edge L-P', weight: 15 } },
-				{ data: { id: 'ma', source: 'm', target: 'a', label: 'Edge M-A', weight: 16 } },
-				{ data: { id: 'de', source: 'd', target: 'b', label: 'Edge D-B', weight: 17 } },
-				{ data: { id: 'eo', source: 'e', target: 'o', label: 'Edge E-O', weight: 18 } },
-				{ data: { id: 'jh', source: 'j', target: 'h', label: 'Edge J-H', weight: 19 } },
-				{ data: { id: 'hn', source: 'h', target: 'n', label: 'Edge H-N', weight: 20 } }
+				{ data: { id: 'ab', source: 'a', target: 'b', label: 'Edge A-B', weight: 1, traffic: 0 } },
+				{ data: { id: 'bc', source: 'b', target: 'c', label: 'Edge B-C', weight: 2, traffic: 0 } },
+				{ data: { id: 'cd', source: 'c', target: 'd', label: 'Edge C-D', weight: 3, traffic: 0 } },
+				{ data: { id: 'da', source: 'd', target: 'a', label: 'Edge D-A', weight: 4, traffic: 0 } },
+				{ data: { id: 'ae', source: 'a', target: 'e', label: 'Edge A-E', weight: 5, traffic: 0 } },
+				{ data: { id: 'ef', source: 'e', target: 'f', label: 'Edge E-F', weight: 6, traffic: 0 } },
+				{ data: { id: 'fc', source: 'f', target: 'c', label: 'Edge F-C', weight: 7, traffic: 0 } }
 			],
 
 			style: [
@@ -152,11 +141,25 @@
 			alert(`Right-clicked on ${node.data('label')}`);
 		});
 
+		// Connect the trip manager to the graph
+		shared.tripManager.setGraph(shared.graph);
+
+		// Start the clock update interval for the UI
+		clockInterval = setInterval(() => {
+			shared.currentTime = shared.tripManager.getCurrentTime();
+		}, 1000);
+
 		return () => {
 			if (shared.graph) {
 				shared.graph.destroy();
 			}
 		};
+	});
+
+	onDestroy(() => {
+		if (clockInterval) {
+			clearInterval(clockInterval);
+		}
 	});
 </script>
 
