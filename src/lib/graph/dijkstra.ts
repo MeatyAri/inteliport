@@ -1,3 +1,4 @@
+import { findEdgesByIds } from "./alterGraph";
 // runs the dijkstra algo and return a list and an integer for its cost
 export function runDijkstra(
 	cy: cytoscape.Core,
@@ -32,21 +33,7 @@ export function runDijkstra(
 	}
 }
 
-// Finds edges by their IDs
-function findEdgesByIds(cy: cytoscape.Core, edgeIds: string[]): cytoscape.EdgeSingular[] {
-	const foundEdges: cytoscape.EdgeSingular[] = [];
 
-	edgeIds.forEach((edgeId) => {
-		const edge = cy.getElementById(edgeId); // Use getElementById to find edges by ID
-
-		if (edge && edge.isEdge()) {
-			// Confirm that the element found is an edge
-			foundEdges.push(edge as cytoscape.EdgeSingular);
-		}
-	});
-
-	return foundEdges;
-}
 
 // Highlight the edges in the path returned by Dijkstra's algorithm
 function getEdgesFromPath(cy: cytoscape.Core, path: string[]): cytoscape.EdgeSingular[] {

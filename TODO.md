@@ -15,7 +15,7 @@
 ## Phase 3:
 
 - [ ] add multi-stop trips
-  - [ ] Held-Karp for Traveling Salesman Problem (TSP), **Dynamic Programming**, Bitmasking
+  - [x] Held-Karp for Traveling Salesman Problem (TSP), **Dynamic Programming**, Bitmasking
 
 # Later:
 
