@@ -101,7 +101,7 @@ export async function handleToolCalls(data: any) {
 					return;
 				}
 				const { nodeId, color } = functionArgs;
-				console.log(`Coloring node ${nodeId} with color ${color}`);
+				//console.log(`Coloring node ${nodeId} with color ${color}`);
 				const node = findNodeById(shared.graph, nodeId);
 				if (node) {
 					colorNode(node, color);
@@ -109,14 +109,14 @@ export async function handleToolCalls(data: any) {
 					alert(`Node with ID ${nodeId} not found.`);
 				}
 			} else if (functionName === 'reset_node_color') {
-				console.log('Resetting node colors to default');
+				//console.log('Resetting node colors to default');
 				if (!shared.graph) {
 					alert('No graph loaded');
 					return;
 				}
 				resetNodeColor(shared.graph);
 			} else if (functionName === 'run_tsp') {
-				console.log('running tsp');
+				//console.log('running tsp');
 				const { startNodeId, nodeIds } = functionArgs;
 				if (!shared.graph) {
 					alert('No graph loaded');
@@ -124,7 +124,7 @@ export async function handleToolCalls(data: any) {
 				}
 				const result = findTSPPath(shared.graph, nodeIds, startNodeId);
 
-				console.log('TSP Result:', result);
+				//console.log('TSP Result:', result);
 			}
 		}
 	}

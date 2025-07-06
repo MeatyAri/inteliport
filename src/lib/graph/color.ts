@@ -3,7 +3,7 @@ export function colorNode(node: cytoscape.NodeSingular, color: string) {
     node.style({
         'background-color': color
     });
-    console.log(node.style('background-color'));
+    //console.log(node.style('background-color'));
 }
 export function resetNodeColor(cy: cytoscape.Core) {
     
