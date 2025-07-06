@@ -4,7 +4,7 @@ import { runKruskal } from '$lib/graph/mst';
 import { shared } from '$lib/shared.svelte';
 import { runDijkstra } from '$lib/graph/dijkstra';
 import { addEdge, addNode, deleteEdge, deleteNode, findNodeById } from '$lib/graph/alterGraph';
-import { colorNode } from '$lib/graph/color';
+import { colorNode, resetNodeColor } from '$lib/graph/color';
 // import { colorNodePurple } from '$lib/graph/color';
 
 
@@ -107,6 +107,13 @@ export async function handleToolCalls(data: any) {
 				} else {
 					alert(`Node with ID ${nodeId} not found.`);
 				}
+			} else if (functionName === 'reset_node_color') {
+				console.log('Resetting node colors to default');
+				if (!shared.graph) {
+					alert('No graph loaded');
+					return;
+				}
+				resetNodeColor(shared.graph);
 			}
 		}
 	}
