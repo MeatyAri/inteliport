@@ -3,7 +3,14 @@ import { clearHighlights, highlightEdges } from '$lib/graph/highlights';
 import { runKruskal } from '$lib/graph/mst';
 import { shared, updateAgentResponse } from '$lib/shared.svelte';
 import { runDijkstra } from '$lib/graph/dijkstra';
-import { addEdge, addNode, deleteEdge, deleteNode, findNodeById } from '$lib/graph/alterGraph';
+import {
+	addEdge,
+	addNode,
+	deleteEdge,
+	deleteNode,
+	findEdgesByIds,
+	findNodeById
+} from '$lib/graph/alterGraph';
 import { colorNode, resetNodeColor } from '$lib/graph/color';
 import { findTSPPath } from '$lib/graph/tsp';
 import { planTrip, startTrip, getTripStatus, getCurrentTime } from '$lib/trip/tripPlanning';
@@ -120,7 +127,6 @@ export async function handleToolCalls(data: any) {
 					return;
 				}
 				const { nodeId, color } = functionArgs;
-				//console.log(`Coloring node ${nodeId} with color ${color}`);
 				const node = findNodeById(shared.graph, nodeId);
 				if (node) {
 					colorNode(node, color);
@@ -128,21 +134,33 @@ export async function handleToolCalls(data: any) {
 					alert(`Node with ID ${nodeId} not found.`);
 				}
 			} else if (functionName === 'reset_node_color') {
-				//console.log('Resetting node colors to default');
 				if (!shared.graph) {
 					alert('No graph loaded');
 					return;
 				}
 				resetNodeColor(shared.graph);
 			} else if (functionName === 'run_tsp') {
-				//console.log('running tsp');
 				const { startNodeId, nodeIds } = functionArgs;
 				if (!shared.graph) {
 					alert('No graph loaded');
 					return;
 				}
-				const result = findTSPPath(shared.graph, nodeIds, startNodeId);
-				//console.log('TSP Result:', result);
+				console.log(
+					`Running tsp starting from ${startNodeId}, visiting nodes ${nodeIds?.join(', ')}`
+				);
+				try {
+					const result = findTSPPath(shared.graph, nodeIds, startNodeId);
+					// Find and highlight edges in the path
+					const listOfEdges = findEdgesByIds(shared.graph, result.edges);
+					clearHighlights(shared.graph);
+					highlightEdges(listOfEdges);
+				} catch (error: unknown) {
+					if (error instanceof Error) {
+						updateAgentResponse(`Error running TSP: ${error.message}`);
+					} else {
+						updateAgentResponse('An unknown error occurred while running TSP.');
+					}
+				}
 			}
 		}
 	}

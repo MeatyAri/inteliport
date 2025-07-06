@@ -183,7 +183,8 @@ export const tools = [
 		function: {
 			name: 'color_node',
 			strict: true,
-			description: 'Make a node a certain color, only possible color is red = #FF0000,green = #00FF00,yellow = #FFFF00,pink = #FFC0CB, blue =0074D9.',
+			description:
+				'Make a node a certain color, only possible color is red = #FF0000,green = #00FF00,yellow = #FFFF00,pink = #FFC0CB, blue =0074D9.',
 			parameters: {
 				type: 'object',
 				properties: {
@@ -197,7 +198,6 @@ export const tools = [
 					}
 				}
 			}
-
 		}
 	},
 	{
@@ -205,7 +205,7 @@ export const tools = [
 		function: {
 			name: 'reset_node_color',
 			strict: true,
-			description: 'reset nodes colors.',
+			description: 'reset nodes colors.'
 		}
 	},
 	{
@@ -236,5 +236,4 @@ export const tools = [
 			}
 		}
 	}
-
 ];

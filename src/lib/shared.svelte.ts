@@ -10,6 +10,11 @@ export const shared = $state({
 });
 
 export function updateAgentResponse(message: string) {
+	if (message === '') {
+		shared.agentResponse = '';
+		return;
+	}
+
 	const regex = /^(\d+)x (.+)$/;
 	const match = message.match(regex);
 

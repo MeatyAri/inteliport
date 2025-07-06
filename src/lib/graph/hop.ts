@@ -1,10 +1,10 @@
 // Function to check whether all pairs of nodes are reachable within two hops
-export function checkAllPairstwoHopReachability(cyto: cytoscape.Core): [boolean, Array<string>]{
+export function checkAllPairstwoHopReachability(cyto: cytoscape.Core): [boolean, Array<string>] {
 	const nodes = cyto.nodes();
 	let stringList: Array<string> = [];
 	let flag = true;
 	if (nodes.length === 0) {
-		return [true,stringList]; // Empty graph is trivially reachable
+		return [true, stringList]; // Empty graph is trivially reachable
 	}
 
 	for (let i = 0; i < nodes.length; i++) {
@@ -15,15 +15,14 @@ export function checkAllPairstwoHopReachability(cyto: cytoscape.Core): [boolean,
 
 			if (!isReachableWithinTwoHops(cyto, startNode.id(), endNode.id())) {
 				flag = false; // At least one pair is not reachable
-				stringList.push(startNode.id()+" <-> "+endNode.id());
+				stringList.push(startNode.id() + ' <-> ' + endNode.id());
 
 				// If any pair is not reachable, the whole graph is not
-				
 			}
 		}
 	}
-	//console.log(stringList);
-	return [flag,stringList]; // All pairs are reachable within 2 hops
+
+	return [flag, stringList]; // All pairs are reachable within 2 hops
 }
 
 // Checks if a specific end node is reachable from a start node within a maximum of 2 hops.

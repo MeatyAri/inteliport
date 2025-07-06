@@ -20,17 +20,6 @@
 				{ data: { id: 'e', label: 'E' } },
 				{ data: { id: 'f', label: 'F' } },
 
-				{ data: { id: 'g', label: 'G' } },
-				{ data: { id: 'h', label: 'H' } },
-				{ data: { id: 'i', label: 'I' } },
-				{ data: { id: 'j', label: 'J' } },
-				{ data: { id: 'k', label: 'K' } },
-				{ data: { id: 'l', label: 'L' } },
-				{ data: { id: 'm', label: 'M' } },
-				{ data: { id: 'n', label: 'N' } },
-				{ data: { id: 'o', label: 'O' } },
-				{ data: { id: 'p', label: 'P' } },
-
 				// Edges
 				{ data: { id: 'ab', source: 'a', target: 'b', label: 'Edge A-B', weight: 1, traffic: 0 } },
 				{ data: { id: 'bc', source: 'b', target: 'c', label: 'Edge B-C', weight: 2, traffic: 0 } },
@@ -126,12 +115,10 @@
 		// Add event listeners
 		shared.graph.on('tap', 'node', function (evt) {
 			const node = evt.target;
-			console.log('Tapped node:', node.data('label'));
 		});
 
 		shared.graph.on('tap', 'edge', function (evt) {
 			const edge = evt.target;
-			console.log('Tapped edge:', edge.data('label'));
 		});
 
 		// Add context menu functionality
