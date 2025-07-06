@@ -1,20 +1,6 @@
 # TODO:
 
-## Phase 2:
-
-- [x] add Dijkstra to find best possible route
-- [x] highlight the selected path
-- [x] a display menu for trip selection
-  - [x] display trip start time
-  - [x] display trip end time
-  - [x] display trip duration
-  - [x] llm function to start the trip
-- [x] heatmap mechanism for weighted graph (probably a JSON with edges and a number assigned to each edge)
-- [x] a priority queue for when a path hits its limit
-
-- [x] close the trip menu
 - [ ] green highlight on top
-- [x] multiple peding trips
 
 ## Phase 3:
 
@@ -45,3 +31,18 @@
   - [x] add MST (Minimum Spanning Tree)
   - [x] make sure every node is accessible by going through at most 2 other nodes
   - [x] arian is a good boi
+
+## Phase 2:
+
+- [x] add Dijkstra to find best possible route
+- [x] highlight the selected path
+- [x] a display menu for trip selection
+  - [x] display trip start time
+  - [x] display trip end time
+  - [x] display trip duration
+  - [x] llm function to start the trip
+- [x] heatmap mechanism for weighted graph (probably a JSON with edges and a number assigned to each edge)
+- [x] a priority queue for when a path hits its limit
+
+- [x] close the trip menu
+- [x] multiple peding trips
