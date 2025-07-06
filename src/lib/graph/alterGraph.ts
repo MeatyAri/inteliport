@@ -63,3 +63,17 @@ export function findEdgeByIds(cy: cytoscape.Core, nodeId1: string, nodeId2: stri
 
 	return null; // Return null if no matching edge is found
 }
+
+export function findNodeById(cy: cytoscape.Core, nodeId: string): cytoscape.NodeSingular | null {
+	// Get all nodes in the Cytoscape instance
+	const nodes = cy.nodes();
+
+	// Iterate through the nodes to find the one that matches the given ID
+	for (let node of nodes) {
+		if (node.id() === nodeId) {
+			return node; // Return the found node
+		}
+	}
+
+	return null; // Return null if no matching node is found
+}

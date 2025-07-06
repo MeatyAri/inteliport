@@ -131,5 +131,27 @@ export const tools = [
 				}
 			}
 		}
+	},
+	{
+		type: 'function',
+		function: {
+			name: 'color_node',
+			strict: true,
+			description: 'Make a node a certain color.',
+			parameters: {
+				type: 'object',
+				properties: {
+					nodeId: {
+						type: 'string',
+						description: 'The id of the node.'
+					},
+					color: {
+						type: 'string',
+						description: 'hex id of the wanted color.'
+					}
+				}
+			}
+
+		}
 	}
 ];

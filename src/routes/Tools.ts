@@ -3,7 +3,10 @@ import { clearHighlights, highlightEdges } from '$lib/graph/highlights';
 import { runKruskal } from '$lib/graph/mst';
 import { shared } from '$lib/shared.svelte';
 import { runDijkstra } from '$lib/graph/dijkstra';
-import { addEdge, addNode, deleteEdge, deleteNode } from '$lib/graph/alterGraph';
+import { addEdge, addNode, deleteEdge, deleteNode, findNodeById } from '$lib/graph/alterGraph';
+import { colorNode } from '$lib/graph/color';
+// import { colorNodePurple } from '$lib/graph/color';
+
 
 export async function handleToolCalls(data: any) {
 	for (const toolCall of data.tool_calls) {
@@ -91,6 +94,19 @@ export async function handleToolCalls(data: any) {
 				}
 				const { nodeId1, nodeId2 } = functionArgs;
 				deleteEdge(shared.graph, nodeId1, nodeId2);
+			} else if (functionName === 'color_node') {
+				if (!shared.graph) {
+					alert('No graph loaded');
+					return;
+				}
+				const { nodeId, color } = functionArgs;
+				console.log(`Coloring node ${nodeId} with color ${color}`);
+				const node = findNodeById(shared.graph, nodeId);
+				if (node) {
+					colorNode(node, color);
+				} else {
+					alert(`Node with ID ${nodeId} not found.`);
+				}
 			}
 		}
 	}
