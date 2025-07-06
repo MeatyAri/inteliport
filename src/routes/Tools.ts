@@ -5,6 +5,7 @@ import { shared } from '$lib/shared.svelte';
 import { runDijkstra } from '$lib/graph/dijkstra';
 import { addEdge, addNode, deleteEdge, deleteNode, findNodeById } from '$lib/graph/alterGraph';
 import { colorNode, resetNodeColor } from '$lib/graph/color';
+import { findTSPPath } from '$lib/graph/tsp';
 // import { colorNodePurple } from '$lib/graph/color';
 
 
@@ -114,6 +115,16 @@ export async function handleToolCalls(data: any) {
 					return;
 				}
 				resetNodeColor(shared.graph);
+			} else if (functionName === 'run_tsp') {
+				console.log('running tsp');
+				const { startNodeId, nodeIds } = functionArgs;
+				if (!shared.graph) {
+					alert('No graph loaded');
+					return;
+				}
+				const result = findTSPPath(shared.graph, nodeIds, startNodeId);
+
+				console.log('TSP Result:', result);
 			}
 		}
 	}

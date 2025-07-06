@@ -77,3 +77,18 @@ export function findNodeById(cy: cytoscape.Core, nodeId: string): cytoscape.Node
 
 	return null; // Return null if no matching node is found
 }
+
+export function findEdgesByIds(cy: cytoscape.Core, edgeIds: string[]): cytoscape.EdgeSingular[] {
+	const foundEdges: cytoscape.EdgeSingular[] = [];
+
+	edgeIds.forEach((edgeId) => {
+		const edge = cy.getElementById(edgeId); // Use getElementById to find edges by ID
+
+		if (edge && edge.isEdge()) {
+			// Confirm that the element found is an edge
+			foundEdges.push(edge as cytoscape.EdgeSingular);
+		}
+	});
+
+	return foundEdges;
+}

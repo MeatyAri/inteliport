@@ -162,4 +162,33 @@ export const tools = [
 			description: 'reset nodes colors.',
 		}
 	},
+	{
+		type: 'function',
+		function: {
+			name: 'run_tsp',
+			strict: true,
+			description:
+				'Run the Traveling Salesman Problem (TSP) algorithm on the graph to find the shortest possible route that starts from a specified node and visits all nodes in the given list exactly once before returning to the starting node. If no list is specified, the function will visit all nodes in the graph. This function calculates the optimal path for visiting all specified nodes with minimal total distance.',
+			parameters: {
+				type: 'object',
+				properties: {
+					nodeIds: {
+						type: 'array',
+						items: {
+							type: 'string'
+						},
+						description:
+							'An array of node identifiers that must be included in the TSP route. If not specified, all nodes in the graph will be visited. The algorithm will find the shortest path that visits all these nodes exactly once.'
+					},
+					startNodeId: {
+						type: 'string',
+						description:
+							'The identifier of the node where the TSP route should begin and end. This node must be included in the nodeIds array or be part of the graph if nodeIds is not specified.'
+					}
+				},
+				required: ['startNodeId']
+			}
+		}
+	}
+
 ];
