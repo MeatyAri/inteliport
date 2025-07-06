@@ -4,7 +4,7 @@
 	import { handleToolCalls } from './Tools';
 	import { shared, updateAgentResponse } from '$lib/shared.svelte';
 	import { serializeGraph } from '$lib/graph/serialize';
-	import { formatTime } from '$lib/trip/tripPlanning';
+	import { formatTime, startTrip } from '$lib/trip/tripPlanning';
 	import MarkdownIt from 'markdown-it';
 
 	// Define the navigation items and selected state
@@ -131,13 +131,13 @@
 
 	function confirmTrip() {
 		if (shared.pendingTrip) {
-			const result = shared.tripManager.startTrip(shared.pendingTrip.id);
-			if (result) {
-				updateAgentResponse('Trip started successfully!');
+			const result = startTrip(shared.pendingTrip.id);
+			if (result.success) {
+				updateAgentResponse(result.message);
 				tripDetails = null;
 				shared.pendingTrip = null;
 			} else {
-				updateAgentResponse('Failed to start trip. Route may be at capacity.');
+				updateAgentResponse(result.message);
 			}
 		}
 	}
@@ -310,11 +310,13 @@
 			<!-- Agent Response Display -->
 			<div
 				class="
-    			    relative top-10 z-10 rounded-t-3xl bg-emerald-500/95 p-4 pb-14
-    				{shared.agentResponse && !tripDetails ? '' : 'hidden'}
+				    relative top-10 z-10 rounded-t-3xl bg-emerald-500/95 p-3 pb-14
+					{shared.agentResponse && !tripDetails ? '' : 'hidden'}
 				"
 			>
-				<article class="prose lg:prose-lg w-full max-w-none text-black">
+				<article
+					class="prose lg:prose-lg custom-scrollbar max-h-72 w-full max-w-none overflow-y-auto px-2 text-black"
+				>
 					{@html md.render(shared.agentResponse)}
 				</article>
 			</div>
@@ -341,3 +343,24 @@
 		<p class="font-mono text-lg font-bold">{formatTime(shared.currentTime)}</p>
 	</div>
 </div>
+
+<style>
+	/* Custom scrollbar styles for WebKit browsers */
+	.custom-scrollbar::-webkit-scrollbar {
+		width: 8px;
+	}
+
+	.custom-scrollbar::-webkit-scrollbar-track {
+		background: #e2e8f0;
+		border-radius: 4px;
+	}
+
+	.custom-scrollbar::-webkit-scrollbar-thumb {
+		background: #4a5568;
+		border-radius: 4px;
+	}
+
+	.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+		background: #374151;
+	}
+</style>

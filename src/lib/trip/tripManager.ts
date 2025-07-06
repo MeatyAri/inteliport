@@ -10,6 +10,12 @@ export interface Trip {
 	estimatedStartTime?: number;
 }
 
+export enum StartTripResult {
+	SUCCESS = 'success',
+	FAILED = 'failed',
+	QUEUED = 'queued'
+}
+
 export interface TripRequest {
 	source: string;
 	target: string;
@@ -192,7 +198,7 @@ export class TripManager {
 			duration: tripRequest.duration,
 			path: tripRequest.path,
 			edges: tripRequest.edges,
-			status: soonestStartTime === this.currentTime ? 'pending' : 'queued',
+			status: 'pending',
 			estimatedStartTime: soonestStartTime
 		};
 
@@ -202,23 +208,7 @@ export class TripManager {
 		return trip;
 	}
 
-	public startTrip(tripId: string): boolean {
-		// Check if the trip is in the queued trips
-		const tripIndex = this.queuedTrips.findIndex((trip) => trip.id === tripId);
-		if (tripIndex !== -1) {
-			const trip = this.queuedTrips[tripIndex];
-
-			if (this.canStartTrip(trip)) {
-				trip.status = 'active';
-				trip.startTime = this.currentTime;
-				this.ongoingTrips.push(trip);
-				this.queuedTrips.splice(tripIndex, 1);
-				return true;
-			}
-
-			return false;
-		}
-
+	public startTrip(tripId: string): StartTripResult {
 		// Check if the trip is in the pendingTrips
 		const pendingTripIndex = this.pendingTrips.findIndex((trip) => trip.id === tripId);
 		if (pendingTripIndex !== -1) {
@@ -229,13 +219,17 @@ export class TripManager {
 				trip.startTime = this.currentTime;
 				this.ongoingTrips.push(trip);
 				this.pendingTrips.splice(pendingTripIndex, 1);
-				return true;
+				return StartTripResult.SUCCESS;
+			} else {
+				// Queue the trip if it cannot start immediately
+				trip.status = 'queued';
+				this.queuedTrips.push(trip);
+				this.pendingTrips.splice(pendingTripIndex, 1);
+				return StartTripResult.QUEUED;
 			}
-
-			return false;
 		}
 
-		return false;
+		return StartTripResult.FAILED;
 	}
 
 	public getCurrentTime(): number {

@@ -1,5 +1,5 @@
 import { runDijkstra } from '$lib/graph/dijkstra';
-import { tripManager, type TripRequest } from './tripManager';
+import { StartTripResult, tripManager, type TripRequest } from '$lib/trip/tripManager';
 import type cytoscape from 'cytoscape';
 
 export function planTrip(
@@ -98,12 +98,17 @@ export function planTrip(
 }
 
 export function startTrip(tripId: string): { success: boolean; message: string } {
-	const success = tripManager.startTrip(tripId);
+	const result = tripManager.startTrip(tripId);
 
-	if (success) {
+	if (result === StartTripResult.SUCCESS) {
 		return {
 			success: true,
 			message: 'Trip started successfully!'
+		};
+	} else if (result === StartTripResult.QUEUED) {
+		return {
+			success: true,
+			message: 'Trip has been queued due to current traffic conditions.'
 		};
 	} else {
 		return {

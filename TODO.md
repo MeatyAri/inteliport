@@ -12,7 +12,7 @@
 - [x] heatmap mechanism for weighted graph (probably a JSON with edges and a number assigned to each edge)
 - [x] a priority queue for when a path hits its limit
 
-- [ ] close the trip menu
+- [x] close the trip menu
 - [ ] green highlight on top
 - [x] multiple peding trips
 
