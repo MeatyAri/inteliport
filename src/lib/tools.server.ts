@@ -4,7 +4,8 @@ export const tools = [
 		function: {
 			name: 'get_mst',
 			strict: true,
-			description: 'Get the minimum spanning tree for the graph.'
+			description:
+				"Calculate and display the minimum spanning tree (MST) for the graph using Kruskal's algorithm."
 		}
 	},
 	{
@@ -12,7 +13,7 @@ export const tools = [
 		function: {
 			name: 'center_graph',
 			strict: true,
-			description: 'Center the graph on screen.'
+			description: 'Center the graph visualization on the screen.'
 		}
 	},
 	{
@@ -20,7 +21,7 @@ export const tools = [
 		function: {
 			name: 'clear_highlights',
 			strict: true,
-			description: 'Clear all highlights from the graph.'
+			description: 'Remove all highlights from the graph visualization.'
 		}
 	},
 	{
@@ -28,7 +29,8 @@ export const tools = [
 		function: {
 			name: 'check_all_pairs_two_hop_reachability',
 			strict: true,
-			description: 'Check if all nodes are reachable within two hops.'
+			description:
+				'Verify if all nodes in the graph are reachable within two hops using BFS reachability analysis.'
 		}
 	},
 	{
@@ -36,7 +38,8 @@ export const tools = [
 		function: {
 			name: 'run_dijkstra',
 			strict: true,
-			description: "Run Dijkstra's algorithm on the graph.",
+			description:
+				"Execute Dijkstra's algorithm to find the shortest path from a source node to a target node.",
 			parameters: {
 				type: 'object',
 				properties: {
@@ -48,7 +51,8 @@ export const tools = [
 						type: 'string',
 						description: 'The target node to find the shortest path to.'
 					}
-				}
+				},
+				required: ['source', 'target']
 			}
 		}
 	},
@@ -58,7 +62,7 @@ export const tools = [
 			name: 'plan_trip',
 			strict: true,
 			description:
-				'Plan a trip from source to target and get trip details including start time, duration, and path.',
+				'Plan a trip from a source node to a target node, providing details including start time, duration, and path.',
 			parameters: {
 				type: 'object',
 				properties: {
@@ -85,7 +89,7 @@ export const tools = [
 		function: {
 			name: 'start_trip',
 			strict: true,
-			description: 'Start a previously planned trip by trip ID.',
+			description: 'Initiate a previously planned trip using its trip ID.',
 			parameters: {
 				type: 'object',
 				properties: {
@@ -103,15 +107,16 @@ export const tools = [
 		function: {
 			name: 'delete_node',
 			strict: true,
-			description: 'Delete a node.',
+			description: 'Remove a node from the graph.',
 			parameters: {
 				type: 'object',
 				properties: {
 					nodeId: {
 						type: 'string',
-						description: 'The id of the node to delete.'
+						description: 'The ID of the node to delete.'
 					}
-				}
+				},
+				required: ['nodeId']
 			}
 		}
 	},
@@ -120,7 +125,7 @@ export const tools = [
 		function: {
 			name: 'add_node',
 			strict: true,
-			description: 'Add a new node to the graph.',
+			description: 'Add a new node to the graph with a specified label.',
 			parameters: {
 				type: 'object',
 				properties: {
@@ -128,7 +133,8 @@ export const tools = [
 						type: 'string',
 						description: 'The label of the new node.'
 					}
-				}
+				},
+				required: ['label']
 			}
 		}
 	},
@@ -137,7 +143,7 @@ export const tools = [
 		function: {
 			name: 'add_edge',
 			strict: true,
-			description: 'Add a new edge to the graph.',
+			description: 'Add a new edge to the graph between two specified nodes with a given weight.',
 			parameters: {
 				type: 'object',
 				properties: {
@@ -153,7 +159,8 @@ export const tools = [
 						type: 'number',
 						description: 'The weight of the new edge.'
 					}
-				}
+				},
+				required: ['source', 'target', 'weight']
 			}
 		}
 	},
@@ -162,19 +169,20 @@ export const tools = [
 		function: {
 			name: 'delete_edge',
 			strict: true,
-			description: 'Delete/remove an edge from the graph.',
+			description: 'Remove an edge from the graph between two specified nodes.',
 			parameters: {
 				type: 'object',
 				properties: {
 					nodeId1: {
 						type: 'string',
-						description: 'The first node of the edge.'
+						description: 'The ID of the first node of the edge.'
 					},
 					nodeId2: {
 						type: 'string',
-						description: 'The second node of the edge.'
+						description: 'The ID of the second node of the edge.'
 					}
-				}
+				},
+				required: ['nodeId1', 'nodeId2']
 			}
 		}
 	},
@@ -184,19 +192,20 @@ export const tools = [
 			name: 'color_node',
 			strict: true,
 			description:
-				'Make a node a certain color, only possible color is red = #FF0000,green = #00FF00,yellow = #FFFF00,pink = #FFC0CB, blue =0074D9.',
+				'Change the color of a specified node. Available colors are red (#FF0000), green (#00FF00), yellow (#FFFF00), pink (#FFC0CB), and blue (#0074D9).',
 			parameters: {
 				type: 'object',
 				properties: {
 					nodeId: {
 						type: 'string',
-						description: 'The id of the node.'
+						description: 'The ID of the node to color.'
 					},
 					color: {
 						type: 'string',
-						description: 'hex id of the wanted color.'
+						description: 'The hex code of the desired color.'
 					}
-				}
+				},
+				required: ['nodeId', 'color']
 			}
 		}
 	},
@@ -205,7 +214,7 @@ export const tools = [
 		function: {
 			name: 'reset_node_color',
 			strict: true,
-			description: 'reset nodes colors.'
+			description: 'Reset the colors of all nodes to their default state.'
 		}
 	},
 	{
@@ -214,7 +223,7 @@ export const tools = [
 			name: 'run_tsp',
 			strict: true,
 			description:
-				'Run the Traveling Salesman Problem (TSP) algorithm on the graph to find the shortest possible route that starts from a specified node and visits all nodes in the given list exactly once before returning to the starting node. If no list is specified, the function will visit all nodes in the graph. This function calculates the optimal path for visiting all specified nodes with minimal total distance.',
+				'Execute the Traveling Salesman Problem (TSP) algorithm to find the shortest possible route that starts from a specified node, visits all nodes in the given list exactly once, and returns to the starting node. If no list is specified, the function will visit all nodes in the graph.',
 			parameters: {
 				type: 'object',
 				properties: {
@@ -224,12 +233,12 @@ export const tools = [
 							type: 'string'
 						},
 						description:
-							'An array of node identifiers that must be included in the TSP route. If not specified, all nodes in the graph will be visited. The algorithm will find the shortest path that visits all these nodes exactly once.'
+							'An array of node IDs that must be included in the TSP route. If not specified, all nodes in the graph will be visited.'
 					},
 					startNodeId: {
 						type: 'string',
 						description:
-							'The identifier of the node where the TSP route should begin and end. This node must be included in the nodeIds array or be part of the graph if nodeIds is not specified.'
+							'The ID of the node where the TSP route should begin and end. This node must be included in the nodeIds array or be part of the graph if nodeIds is not specified.'
 					}
 				},
 				required: ['startNodeId']
