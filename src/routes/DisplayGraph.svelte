@@ -2,7 +2,6 @@
 	import { onMount, onDestroy } from 'svelte';
 	import cytoscape from 'cytoscape';
 	import { shared } from '$lib/shared.svelte';
-	$inspect(shared);
 
 	let container: HTMLDivElement;
 	let clockInterval: NodeJS.Timeout;

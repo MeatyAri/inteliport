@@ -1,4 +1,3 @@
-import { shared } from '$lib/shared.svelte';
 import type cytoscape from 'cytoscape';
 
 export interface Trip {
@@ -25,6 +24,7 @@ export class TripManager {
 	private currentTime: number = 0;
 	private ongoingTrips: Trip[] = [];
 	private queuedTrips: Trip[] = [];
+	private pendingTrips: Trip[] = []; // Changed from pendingTrip to pendingTrips
 	private clockInterval: NodeJS.Timeout | null = null;
 	private graph: cytoscape.Core | null = null;
 
@@ -196,16 +196,8 @@ export class TripManager {
 			estimatedStartTime: soonestStartTime
 		};
 
-		shared.pendingTrip = trip;
-
-		// if (soonestStartTime === this.currentTime && this.canStartTrip(trip)) {
-		// 	trip.status = 'active';
-		// 	trip.startTime = this.currentTime;
-		// 	this.ongoingTrips.push(trip);
-		// } else {
-		// 	trip.status = 'queued';
-		// 	this.queuedTrips.push(trip);
-		// }
+		// Add to pendingTrips instead of setting a single pendingTrip
+		this.pendingTrips.push(trip);
 
 		return trip;
 	}
@@ -227,15 +219,16 @@ export class TripManager {
 			return false;
 		}
 
-		// Check if the trip is the pending trip
-		if (shared.pendingTrip && shared.pendingTrip.id === tripId) {
-			const trip = shared.pendingTrip;
+		// Check if the trip is in the pendingTrips
+		const pendingTripIndex = this.pendingTrips.findIndex((trip) => trip.id === tripId);
+		if (pendingTripIndex !== -1) {
+			const trip = this.pendingTrips[pendingTripIndex];
 
 			if (this.canStartTrip(trip)) {
 				trip.status = 'active';
 				trip.startTime = this.currentTime;
 				this.ongoingTrips.push(trip);
-				shared.pendingTrip = null;
+				this.pendingTrips.splice(pendingTripIndex, 1);
 				return true;
 			}
 
@@ -257,8 +250,12 @@ export class TripManager {
 		return [...this.queuedTrips];
 	}
 
+	public getPendingTrips(): Trip[] {
+		return [...this.pendingTrips];
+	}
+
 	public getAllTrips(): Trip[] {
-		return [...this.ongoingTrips, ...this.queuedTrips];
+		return [...this.ongoingTrips, ...this.queuedTrips, ...this.pendingTrips];
 	}
 
 	public formatTime(timestamp: number): string {
@@ -277,6 +274,25 @@ export class TripManager {
 		this.stopGlobalClock();
 		this.ongoingTrips = [];
 		this.queuedTrips = [];
+		this.pendingTrips = [];
+	}
+
+	// New method to remove a trip by tripId
+	public removeTrip(tripId: string): boolean {
+		const removeFromList = (list: Trip[]) => {
+			const index = list.findIndex((trip) => trip.id === tripId);
+			if (index !== -1) {
+				list.splice(index, 1);
+				return true;
+			}
+			return false;
+		};
+
+		return (
+			removeFromList(this.ongoingTrips) ||
+			removeFromList(this.queuedTrips) ||
+			removeFromList(this.pendingTrips)
+		);
 	}
 }
 

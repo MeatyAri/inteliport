@@ -1,7 +1,7 @@
 import { checkAllPairstwoHopReachability } from '$lib/graph/hop';
 import { clearHighlights, highlightEdges } from '$lib/graph/highlights';
 import { runKruskal } from '$lib/graph/mst';
-import { shared } from '$lib/shared.svelte';
+import { shared, updateAgentResponse } from '$lib/shared.svelte';
 import { runDijkstra } from '$lib/graph/dijkstra';
 import { addEdge, addNode, deleteEdge, deleteNode, findNodeById } from '$lib/graph/alterGraph';
 import { colorNode, resetNodeColor } from '$lib/graph/color';
@@ -44,7 +44,7 @@ export async function handleToolCalls(data: any) {
 					return;
 				}
 				const result = checkAllPairstwoHopReachability(shared.graph);
-				alert(
+				updateAgentResponse(
 					result[0]
 						? 'All nodes are reachable within two hops.'
 						: 'Not all nodes are reachable within two hops.'
@@ -85,7 +85,7 @@ export async function handleToolCalls(data: any) {
 			} else if (functionName === 'start_trip') {
 				const { tripId } = functionArgs;
 				const result = startTrip(tripId);
-				alert(result.message);
+				updateAgentResponse(result.message);
 			} else if (functionName === 'delete_node') {
 				if (!shared.graph) {
 					alert('No graph loaded');

@@ -14,7 +14,7 @@
 
 - [ ] close the trip menu
 - [ ] green highlight on top
-- [ ] multiple peding trips
+- [x] multiple peding trips
 
 ## Phase 3:
 

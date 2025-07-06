@@ -2,13 +2,15 @@
 	import { fly } from 'svelte/transition';
 	import DisplayGraph from './DisplayGraph.svelte';
 	import { handleToolCalls } from './Tools';
-	import { shared } from '$lib/shared.svelte';
+	import { shared, updateAgentResponse } from '$lib/shared.svelte';
 	import { serializeGraph } from '$lib/graph/serialize';
 	import { formatTime } from '$lib/trip/tripPlanning';
+	import MarkdownIt from 'markdown-it';
 
 	// Define the navigation items and selected state
 	const navItems = ['Graph', 'Profile', 'Settings'];
 	let selectedNav: string = $state('Graph');
+	const md = new MarkdownIt({ html: true, linkify: true, typographer: true });
 
 	function selectNav(item: string) {
 		selectedNav = item;
@@ -41,7 +43,8 @@
 				triggerEnterFunction();
 			}
 		} else if (event.key === 'Escape') {
-			shared.agentResponse = '';
+			updateAgentResponse('');
+			cancelTrip();
 		}
 	}
 
@@ -66,6 +69,8 @@
 		});
 
 		const data = await response.json();
+		// Store the agent response
+		updateAgentResponse(data.content || '');
 
 		// Extract tool calls from the response and execute functions
 		if (data.tool_calls) {
@@ -99,18 +104,17 @@
 				};
 			}
 		}
-
-		// Store the agent response
-		shared.agentResponse = data.content || '';
 	}
 
 	function triggerCtrlEnterFunction() {
 		console.log('Ctrl+Enter function triggered');
 		// Add your logic here for Ctrl+Enter key press
 		text = '';
-		shared.agentResponse = '';
+		updateAgentResponse('');
 		tripDetails = null;
-		shared.pendingTrip = null;
+		if (shared.pendingTrip) {
+			confirmTrip();
+		}
 		if (textarea) {
 			textarea.focus();
 		}
@@ -129,19 +133,22 @@
 		if (shared.pendingTrip) {
 			const result = shared.tripManager.startTrip(shared.pendingTrip.id);
 			if (result) {
-				shared.agentResponse = 'Trip started successfully!';
+				updateAgentResponse('Trip started successfully!');
 				tripDetails = null;
 				shared.pendingTrip = null;
 			} else {
-				shared.agentResponse = 'Failed to start trip. Route may be at capacity.';
+				updateAgentResponse('Failed to start trip. Route may be at capacity.');
 			}
 		}
 	}
 
 	function cancelTrip() {
-		tripDetails = null;
-		shared.pendingTrip = null;
-		shared.agentResponse = 'Trip cancelled.';
+		if (shared.pendingTrip) {
+			tripDetails = null;
+			shared.tripManager.removeTrip(shared.pendingTrip.id);
+			shared.pendingTrip = null;
+			updateAgentResponse('Trip cancelled.');
+		}
 	}
 </script>
 
@@ -307,7 +314,9 @@
     				{shared.agentResponse && !tripDetails ? '' : 'hidden'}
 				"
 			>
-				<p class="text-md text-black">{shared.agentResponse}</p>
+				<article class="prose lg:prose-lg w-full max-w-none text-black">
+					{@html md.render(shared.agentResponse)}
+				</article>
 			</div>
 			<textarea
 				bind:value={text}

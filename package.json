@@ -17,19 +17,22 @@
 		"@sveltejs/adapter-auto": "^6.0.1",
 		"@sveltejs/kit": "^2.22.2",
 		"@sveltejs/vite-plugin-svelte": "^5.1.0",
+		"@tailwindcss/typography": "^0.5.16",
 		"@tailwindcss/vite": "^4.1.11",
 		"prettier": "^3.6.2",
 		"prettier-plugin-svelte": "^3.4.0",
 		"prettier-plugin-tailwindcss": "^0.6.13",
-		"svelte": "^5.34.9",
+		"svelte": "^5.35.2",
 		"svelte-check": "^4.2.2",
 		"tailwindcss": "^4.1.11",
 		"typescript": "^5.8.3",
 		"vite": "^6.3.5",
-		"vite-plugin-devtools-json": "^0.2.0"
+		"vite-plugin-devtools-json": "^0.2.1"
 	},
 	"dependencies": {
 		"@cerebras/cerebras_cloud_sdk": "^1.35.0",
-		"cytoscape": "^3.32.0"
+		"@types/markdown-it": "^14.1.2",
+		"cytoscape": "^3.32.0",
+		"markdown-it": "^14.1.0"
 	}
 }

@@ -1,6 +1,5 @@
 import type cytoscape from 'cytoscape';
 import { tripManager } from '$lib/trip/tripManager';
-import { shared } from '$lib/shared.svelte';
 
 /**
  * Converts a Cytoscape graph to a human-readable text representation
@@ -96,7 +95,7 @@ export function serializeGraph(graph: cytoscape.Core): string {
 	const currentTime = tripManager.getCurrentTime();
 	const ongoingTrips = tripManager.getOngoingTrips();
 	const queuedTrips = tripManager.getQueuedTrips();
-	const pendingTrip = shared.pendingTrip;
+	const pendingTrips = tripManager.getPendingTrips();
 
 	output += '\nTrip Status:\n';
 	output += `Current Time: ${formatTime(currentTime)}\n\n`;
@@ -133,17 +132,19 @@ export function serializeGraph(graph: cytoscape.Core): string {
 		output += 'No queued trips.\n\n';
 	}
 
-	if (pendingTrip) {
-		output += 'Pending Trip:\n';
-		const pathNodes = pendingTrip.path.filter((p: string) => p.length === 1);
-		output += `- Trip ID: ${pendingTrip.id}\n`;
-		output += `  Source: ${pathNodes[0]?.toUpperCase() || 'Unknown'}\n`;
-		output += `  Target: ${pathNodes[pathNodes.length - 1]?.toUpperCase() || 'Unknown'}\n`;
-		output += `  Estimated Start Time: ${formatTime(pendingTrip.estimatedStartTime || pendingTrip.startTime)}\n`;
-		output += `  Duration: ${pendingTrip.duration} seconds\n`;
-		output += `  Status: ${pendingTrip.status}\n\n`;
+	if (pendingTrips.length > 0) {
+		output += 'Pending Trips:\n';
+		pendingTrips.forEach((trip) => {
+			const pathNodes = trip.path.filter((p) => p.length === 1);
+			output += `- Trip ID: ${trip.id}\n`;
+			output += `  Source: ${pathNodes[0]?.toUpperCase() || 'Unknown'}\n`;
+			output += `  Target: ${pathNodes[pathNodes.length - 1]?.toUpperCase() || 'Unknown'}\n`;
+			output += `  Estimated Start Time: ${formatTime(trip.estimatedStartTime || trip.startTime)}\n`;
+			output += `  Duration: ${trip.duration} seconds\n`;
+			output += `  Status: ${trip.status}\n\n`;
+		});
 	} else {
-		output += 'No pending trip.\n\n';
+		output += 'No pending trips.\n\n';
 	}
 
 	return output;
@@ -182,12 +183,12 @@ export function serializeGraphCompact(graph: cytoscape.Core): string {
 	const currentTime = tripManager.getCurrentTime();
 	const ongoingTrips = tripManager.getOngoingTrips();
 	const queuedTrips = tripManager.getQueuedTrips();
-	const pendingTrip = shared.pendingTrip;
+	const pendingTrips = tripManager.getPendingTrips();
 
 	output += `\nCurrent Time: ${formatTime(currentTime)}\n`;
 	output += `Ongoing Trips: ${ongoingTrips.length}\n`;
 	output += `Queued Trips: ${queuedTrips.length}\n`;
-	output += `Pending Trip: ${pendingTrip ? pendingTrip.id : 'None'}\n`;
+	output += `Pending Trips: ${pendingTrips.length}\n`;
 
 	return output;
 }
