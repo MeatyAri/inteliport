@@ -247,8 +247,6 @@ inteliport/
 
 ### Phase 3 Roadmap
 
-- **TSP Implementation** - Multi-destination optimization
-- **Dynamic Programming** - Advanced route planning
 - **Capacity Management** - Real-time booking system
 - **Time-based Routing** - Schedule-aware pathfinding
 
@@ -257,7 +255,6 @@ inteliport/
 - **Geographic Partitioning** - Regional graph management
 - **Distributed Computing** - Parallel algorithm execution
 - **Performance Optimization** - Large-scale graph handling
-- **Real-time Updates** - Live transportation data
 
 ### UII Evolution
 
@@ -299,9 +296,8 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 For questions, suggestions, or collaboration opportunities, please reach out:
 
-- **Project Repository**: [GitHub Link](https://github.com/inteliport/inteliport)
-- **Documentation**: [Wiki Link](https://github.com/inteliport/inteliport/wiki)
-- **Issues**: [GitHub Issues](https://github.com/inteliport/inteliport/issues)
+- **Project Repository**: [GitHub Link](https://github.com/MeatyAri/inteliport)
+- **Issues**: [GitHub Issues](https://github.com/inteliport/MeatyAri/issues)
 
 ---
 
