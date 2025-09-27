@@ -2,6 +2,10 @@
 
 **A revolutionary transportation planning system that introduces UII (User Intent Interface) - a new paradigm for human-computer interaction using Large Language Models to transform natural language into actionable application commands.**
 
+
+https://github.com/user-attachments/assets/392c0aca-e9c9-4d0c-8f6a-8d954c684634
+
+
 ## 🚀 Introduction
 
 InteliPort addresses the growing commuting needs of students, professors, and staff across various universities in cities. Our system enables smart travel planning and booking between universities, aiming to reduce costs, save time, and enhance efficiency through advanced graph algorithms and AI-powered interactions.
